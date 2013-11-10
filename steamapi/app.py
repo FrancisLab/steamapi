@@ -200,9 +200,8 @@ class SteamApp(SteamObject):
             id: An integer associated with the category
             description: Short description of the category
         """
-        #TODO: Transform into a list of descriptions.
         if self.app_info:
-            return self.app_info.categories
+            return [category.description for category in self.app_info.categories]
 
     @property
     def genres(self):
@@ -211,9 +210,8 @@ class SteamApp(SteamObject):
             id: An integer associated with the genre
             description: Short description of the genre
         """
-        #TODO: Transform into a list of descriptions.
         if self.app_info:
-            return self.app_info.genres
+            return [genre.description for genre in self.app_info.genres]
 
     @property
     def recommendations(self):

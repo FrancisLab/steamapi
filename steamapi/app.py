@@ -105,7 +105,7 @@ class SteamApp(SteamObject):
     @property
     def pc_requirements(self):
         """
-        Structure describing PC requirements to run SteamApp.
+        Dictionary describing PC requirements to run SteamApp.
             recommended: Html string describing recommended requirements
             minimunm: Html string describing minimal requirements
         """
@@ -115,7 +115,7 @@ class SteamApp(SteamObject):
     @property
     def mac_requirements(self):
         """
-        Structure describing Mac requirements to run SteamApp.
+        Dictionary describing Mac requirements to run SteamApp.
             recommended: Html string describing recommended requirements
             minimunm: Html string describing minimal requirements
         """
@@ -125,7 +125,7 @@ class SteamApp(SteamObject):
     @property
     def linux_requirements(self):
         """
-        Structure describing linux requirements to run SteamApp.
+        Dictionary describing linux requirements to run SteamApp.
             recommended: Html string describing recommended requirements
             minimunm: Html string describing minimal requirements
         """
@@ -176,7 +176,7 @@ class SteamApp(SteamObject):
     @property
     def platforms(self):
         """
-        Bools indicating whether SteamApp is available on platform.
+        Booleans indicating whether SteamApp is available on platform.
             windows
             mac
             linux

@@ -41,7 +41,7 @@ class SteamApp(SteamObject):
         if response[str(self._id)].success:
             return response[str(self._id)].data
 
-    @cached_property(ttl=INFINITE)
+    @property
     def name(self):
         if self.app_info:
             #Names returned by StoreFrontApi are in UTF-8
@@ -77,12 +77,22 @@ class SteamApp(SteamObject):
         if self.app_info:
             return self.app_info.about_the_game
 
-    @property
+    @cached_property(ttl=INFINITE)
     def supported_languages(self):
-        """ Returns an html unicode string describing available languages. """
-        #TODO: Translate html into a more user friendly format
+        """
+        Returns information concerning languages supported by the SteamApp.
+            full_audio_support: List of languages providing full audio support.
+            basic_support: List of languages providing only interface translation and subtitles.
+        """
         if self.app_info:
-            return self.app_info.supported_languages
+            languages_string = self.app_info.supported_languages
+            languages_string = languages_string[:languages_string.find("<br>")]
+            languages = languages_string.split(",")
+
+            full_audio_support = [lang[:lang.find('<')] for lang in languages if lang.find('*') != -1]
+            basic_support = full_audio_support + [lang for lang in languages if lang.find('*') == -1]
+
+            return {'full_audio_support': full_audio_support, 'basic_support': basic_support}
 
     @property
     def header_image(self):
@@ -193,7 +203,7 @@ class SteamApp(SteamObject):
         if self.app_info:
             return self.app_info.metacritic
 
-    @property
+    @cached_property(ttl=INFINITE)
     def categories(self):
         """
         List of the categories the SteamApp belongs to.
@@ -203,7 +213,7 @@ class SteamApp(SteamObject):
         if self.app_info:
             return [category.description for category in self.app_info.categories]
 
-    @property
+    @cached_property(ttl=INFINITE)
     def genres(self):
         """
         List of the categories the SteamApp belongs to.

@@ -106,7 +106,7 @@ class StoreAPIConnection(object):
         Call an API command. All keyword commands past method will be made into GET/POST-based commands,
         automatically.
 
-        :param command: A matching command. (E.g.: "GetPlayerSummaries")
+        :param command: A matching command. (E.g.: "appdetails")
         :param method: Which HTTP method this call should use. GET by default, but can be overriden to use POST for
                        POST-exclusive APIs or long parameter lists.
         :param kwargs: A bunch of keyword arguments for the call itself. "key" and "format" should NOT be specified.

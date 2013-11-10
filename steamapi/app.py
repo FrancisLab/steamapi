@@ -32,11 +32,6 @@ class SteamApp(SteamObject):
         return achievements_list
 
     @cached_property(ttl=INFINITE)
-    def name(self):
-        response = APIConnection().call("ISteamUserStats", "GetSchemaForGame", "v2", appid=self._id)
-        return response.game.gameName
-
-    @cached_property(ttl=INFINITE)
     def app_info(self):
         response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic,fullgame,developers," +
                                                                                     "publishers,demos,price_overview," +
@@ -45,6 +40,10 @@ class SteamApp(SteamObject):
                                                                                     "release_date")
         if response[str(self._id)].success:
             return response[str(self._id)].data
+
+    @cached_property(ttl=INFINITE)
+    def name(self):
+        return self.app_info.name
 
     @property
     def type(self):
@@ -61,9 +60,8 @@ class SteamApp(SteamObject):
     @property
     def dlc(self):
         """ List the appids of the SteamApp's DLCs. """
-        #TODO: Return list of SteamApps instead of list of ids
         if self.app_info:
-            return self.app_info.dlc
+            return [SteamApp(app_id) for app_id in self.app_info.dlc]
 
     @property
     def detailed_description(self):

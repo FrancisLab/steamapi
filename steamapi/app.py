@@ -45,7 +45,7 @@ class SteamApp(SteamObject):
     def name(self):
         if self.app_info:
             #Names returned by StoreFrontApi are in UTF-8
-            return self.app_info.name.encode('ascii', 'ignore')
+            return self.app_info.name
 
     @property
     def type(self):

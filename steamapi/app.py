@@ -1,6 +1,6 @@
 __author__ = 'SmileyBarry'
 
-from .core import APIConnection, SteamObject
+from .core import APIConnection, SteamObject, StoreAPIConnection
 from .decorators import cached_property, INFINITE
 
 
@@ -35,6 +35,61 @@ class SteamApp(SteamObject):
     def name(self):
         response = APIConnection().call("ISteamUserStats", "GetSchemaForGame", "v2", appid=self._id)
         return response.game.gameName
+
+    @cached_property(ttl=INFINITE)
+    def type(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
+        return response[str(self._id)].data.type
+
+    @cached_property(ttl=INFINITE)
+    def required_age(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
+        return response[str(self._id)].data.required_age
+
+    @cached_property(ttl=INFINITE)
+    def dlc(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
+        return response[str(self._id)].data.dlc
+
+    @cached_property(ttl=INFINITE)
+    def detailed_description(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
+        return response[str(self._id)].data.detailed_description
+
+    @cached_property(ttl=INFINITE)
+    def about_the_game(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
+        return response[str(self._id)].data.about_the_game
+
+    @cached_property(ttl=INFINITE)
+    def supported_languages(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
+        return response[str(self._id)].data.supported_languages
+
+    @cached_property(ttl=INFINITE)
+    def header_image(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
+        return response[str(self._id)].data.header_image
+
+    @cached_property(ttl=INFINITE)
+    def website(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
+        return response[str(self._id)].data.website
+
+    @cached_property(ttl=INFINITE)
+    def pc_requirements(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
+        return response[str(self._id)].data.pc_requirements
+
+    @cached_property(ttl=INFINITE)
+    def mac_requirements(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
+        return response[str(self._id)].data.mac_requirements
+
+    @cached_property(ttl=INFINITE)
+    def linux_requirements(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
+        return response[str(self._id)].data.linux_requirements
 
     def __str__(self):
         return self.name

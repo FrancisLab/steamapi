@@ -43,7 +43,9 @@ class SteamApp(SteamObject):
 
     @cached_property(ttl=INFINITE)
     def name(self):
-        return self.app_info.name
+        if self.app_info:
+            #Names returned by StoreFrontApi are in UTF-8
+            return self.app_info.name.encode('ascii', 'ignore')
 
     @property
     def type(self):
@@ -133,8 +135,8 @@ class SteamApp(SteamObject):
     @property
     def fullgame(self):
         """ Steam id of fullgame if current SteamApp is a demo. """
-        if self.app_info:
-            return self.app_info.fullgame
+        if self.app_info and self.app_info.fullgame:
+            return SteamApp(self.app_info.fullgame.appid)
 
     @property
     def developers(self):
@@ -148,16 +150,15 @@ class SteamApp(SteamObject):
         if self.app_info:
             return self.app_info.publishers
 
-    @property
+    @cached_property(ttl=INFINITE)
     def demos(self):
         """
         Information about the SteamApp's demo. None if there is none.
-            appid: appid of the demo app
+            demos: List of demo SteamApps of the current SteamApp
             description: Used to note the demo's restrictions
         """
-        #TODO: Return a SteamApp instead of the demo's appid
-        if self.app_info:
-            return self.app_info.demos
+        if self.app_info and self.app_info.demos:
+            return [{'demo': SteamApp(demo.appid), 'description': demo.description} for demo in self.app_info.demos]
 
     @property
     def price_overview(self):

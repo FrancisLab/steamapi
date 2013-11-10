@@ -37,59 +37,124 @@ class SteamApp(SteamObject):
         return response.game.gameName
 
     @cached_property(ttl=INFINITE)
+    def app_info(self):
+        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic,fullgame,developers," +
+                                                                                    "publishers,demos,price_overview," +
+                                                                                    "platforms,metacritic,categories," +
+                                                                                    "genres,recommendations," +
+                                                                                    "release_date")
+        if response[str(self._id)].success:
+            return response[str(self._id)].data
+
+    @property
     def type(self):
-        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
-        return response[str(self._id)].data.type
+        if self.app_info:
+            return self.app_info.type
 
-    @cached_property(ttl=INFINITE)
+    @property
     def required_age(self):
-        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
-        return response[str(self._id)].data.required_age
+        if self.app_info:
+            return self.app_info.required_age
 
-    @cached_property(ttl=INFINITE)
+    @property
     def dlc(self):
-        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
-        return response[str(self._id)].data.dlc
+        if self.app_info:
+            return self.app_info.dlc
 
-    @cached_property(ttl=INFINITE)
+    @property
     def detailed_description(self):
-        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
-        return response[str(self._id)].data.detailed_description
+        if self.app_info:
+            return self.app_info.detailed_description
 
-    @cached_property(ttl=INFINITE)
+    @property
     def about_the_game(self):
-        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
-        return response[str(self._id)].data.about_the_game
+        if self.app_info:
+            return self.app_info.about_the_game
 
-    @cached_property(ttl=INFINITE)
+    @property
     def supported_languages(self):
-        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
-        return response[str(self._id)].data.supported_languages
+        if self.app_info:
+            return self.app_info.supported_languages
 
-    @cached_property(ttl=INFINITE)
+    @property
     def header_image(self):
-        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
-        return response[str(self._id)].data.header_image
+        if self.app_info:
+            return self.app_info.header_image
 
-    @cached_property(ttl=INFINITE)
+    @property
     def website(self):
-        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
-        return response[str(self._id)].data.website
+        if self.app_info:
+            return self.app_info.website
 
-    @cached_property(ttl=INFINITE)
+    @property
     def pc_requirements(self):
-        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
-        return response[str(self._id)].data.pc_requirements
+        if self.app_info:
+            return self.app_info.pc_requirements
 
-    @cached_property(ttl=INFINITE)
+    @property
     def mac_requirements(self):
-        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
-        return response[str(self._id)].data.mac_requirements
+        if self.app_info:
+            return self.app_info.mac_requirements
 
-    @cached_property(ttl=INFINITE)
+    @property
     def linux_requirements(self):
-        response = StoreAPIConnection().call("appdetails", appids=self._id, filters="basic")
-        return response[str(self._id)].data.linux_requirements
+        if self.app_info:
+            return self.app_info.linux_requirements
+
+    @property
+    def fullgame(self):
+        if self.app_info:
+            return self.app_info.fullgame
+
+    @property
+    def developers(self):
+        if self.app_info:
+            return self.app_info.developers
+
+    @property
+    def publishers(self):
+        if self.app_info:
+            return self.app_info.publishers
+
+    @property
+    def demos(self):
+        if self.app_info:
+            return self.app_info.demos
+
+    @property
+    def price_overview(self):
+        if self.app_info:
+            return self.app_info.price_overview
+
+    @property
+    def platforms(self):
+        if self.app_info:
+            return self.app_info.platforms
+
+    @property
+    def metacritic(self):
+        if self.app_info:
+            return self.app_info.metacritic
+
+    @property
+    def categories(self):
+        if self.app_info:
+            return self.app_info.categories
+
+    @property
+    def genres(self):
+        if self.app_info:
+            return self.app_info.genres
+
+    @property
+    def recommendations(self):
+        if self.app_info:
+            return self.app_info.recommendations
+
+    @property
+    def release_date(self):
+        if self.app_info:
+            return self.app_info.release_date
 
     def __str__(self):
         return self.name

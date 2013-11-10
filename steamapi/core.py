@@ -47,7 +47,7 @@ class APIConnection(object):
         :param method: Which HTTP method this call should use. GET by default, but can be overriden to use POST for
                        POST-exclusive APIs or long parameter lists.
         :param kwargs: A bunch of keyword arguments for the call itself. "key" and "format" should NOT be specified.
-                       If APIConnection has an assoociated key, "key" will be overwritten by it, and overriding "format"
+                       If APIConnection has an associated key, "key" will be overwritten by it, and overriding "format"
                        cancels out automatic parsing. (The resulting object WILL NOT be an APIResponse but a string.)
 
         :rtype : APIResponse or str
@@ -107,7 +107,12 @@ class APIResponse(object):
             if type(father_dict[item]) is dict:
                 self._real_dictionary[item] = APIResponse(father_dict[item])
             elif type(father_dict[item]) is list:
-                self._real_dictionary[item] = [APIResponse(entry) for entry in father_dict[item]]
+                #Recurse if list contains dictionaries
+                if all(type(list_item) is dict for list_item in father_dict[item]):
+                    self._real_dictionary[item] = [APIResponse(entry) for entry in father_dict[item]]
+                #Otherwise set as list of strings
+                else:
+                    self._real_dictionary[item] = [str(entry) for entry in father_dict[item]]
             else:
                 self._real_dictionary[item] = father_dict[item]
 

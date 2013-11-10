@@ -140,8 +140,6 @@ class StoreAPIConnection(object):
         else:
             response = requests.request(method, query, params=kwargs)
 
-        print(response.json())
-
         if response.status_code != 200:
             errors.raiseAppropriateException(response.status_code)
 

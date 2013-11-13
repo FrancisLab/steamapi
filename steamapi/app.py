@@ -64,6 +64,8 @@ class SteamApp(SteamObject):
         """ List the appids of the SteamApp's DLCs. """
         if self.app_info and self.app_info.dlc:
             return [SteamApp(app_id) for app_id in self.app_info.dlc]
+        else:
+            return []
 
     @property
     def detailed_description(self):
@@ -84,7 +86,7 @@ class SteamApp(SteamObject):
             full_audio_support: List of languages providing full audio support.
             basic_support: List of languages providing only interface translation and subtitles.
         """
-        if self.app_info:
+        if self.app_info and self.app_info.supported_languages:
             languages_string = self.app_info.supported_languages
             languages_string = languages_string[:languages_string.find("<br>")]
             languages = languages_string.split(",")
@@ -119,8 +121,11 @@ class SteamApp(SteamObject):
             recommended: Html string describing recommended requirements
             minimunm: Html string describing minimal requirements
         """
-        if self.app_info:
+        if self.app_info and self.app_info.pc_requirements:
             return self.app_info.pc_requirements
+        else:
+            return {'recommended': '', 'minimum': ''}
+
 
     @property
     def mac_requirements(self):
@@ -129,8 +134,10 @@ class SteamApp(SteamObject):
             recommended: Html string describing recommended requirements
             minimunm: Html string describing minimal requirements
         """
-        if self.app_info:
+        if self.app_info and self.app_info.mac_requirements:
             return self.app_info.mac_requirements
+        else:
+            return {'recommended': '', 'minimum': ''}
 
     @property
     def linux_requirements(self):
@@ -139,8 +146,10 @@ class SteamApp(SteamObject):
             recommended: Html string describing recommended requirements
             minimunm: Html string describing minimal requirements
         """
-        if self.app_info:
+        if self.app_info and self.app_info.linux_requirements:
             return self.app_info.linux_requirements
+        else:
+            return {'recommended': '', 'minimum': ''}
 
     @property
     def fullgame(self):
@@ -169,6 +178,8 @@ class SteamApp(SteamObject):
         """
         if self.app_info and self.app_info.demos:
             return [{'demo': SteamApp(demo.appid), 'description': demo.description} for demo in self.app_info.demos]
+        else:
+            return []
 
     @property
     def price_overview(self):
@@ -210,8 +221,10 @@ class SteamApp(SteamObject):
             id: An integer associated with the category
             description: Short description of the category
         """
-        if self.app_info:
+        if self.app_info and self.app_info.categories:
             return [category.description for category in self.app_info.categories]
+        else:
+            return []
 
     @cached_property(ttl=INFINITE)
     def genres(self):
@@ -220,8 +233,10 @@ class SteamApp(SteamObject):
             id: An integer associated with the genre
             description: Short description of the genre
         """
-        if self.app_info:
+        if self.app_info and self.app_info.genres:
             return [genre.description for genre in self.app_info.genres]
+        else:
+            return []
 
     @property
     def recommendations(self):

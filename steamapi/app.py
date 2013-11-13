@@ -62,7 +62,7 @@ class SteamApp(SteamObject):
     @property
     def dlc(self):
         """ List the appids of the SteamApp's DLCs. """
-        if self.app_info:
+        if self.app_info and self.app_info.dlc:
             return [SteamApp(app_id) for app_id in self.app_info.dlc]
 
     @property

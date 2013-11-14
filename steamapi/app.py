@@ -18,7 +18,7 @@ class SteamApp(SteamObject):
 
     @cached_property(ttl=INFINITE)
     def achievements(self):
-        response = APIConnection().call("ISteamUserStats", "GetSchemaForGame", "v2", appid=self._id)
+        response = APIConnection().call("ISteamUserStats", "GetSchemaForGame", "v2", appid=self._id, l='english')
         achievements_list = []
         import time
         for achievement in response.game.availableGameStats.achievements:
@@ -57,7 +57,7 @@ class SteamApp(SteamObject):
     def required_age(self):
         """ Minimum age to access SteamApp. """
         if self.app_info:
-            return self.app_info.required_age
+            return int(self.app_info.required_age)
 
     @property
     def dlc(self):
@@ -241,11 +241,10 @@ class SteamApp(SteamObject):
     @property
     def recommendations(self):
         """
-        Information related to the SteamApp recommendations
-            total : integer
+        Number of time the game was recommended.
         """
         if self.app_info:
-            return self.app_info.recommendations
+            return self.app_info.recommendations.total
 
     @property
     def release_date(self):
